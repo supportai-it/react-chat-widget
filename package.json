@@ -1,7 +1,9 @@
 {
   "name": "@supportai.it/react-chat-widget",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "private": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -12,16 +14,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "publish:npm": "rm -rf dist && mkdir dist && babel src/component -d dist --copy-files"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-react"
-    ]
+    "lint": "tsc",
+    "build": "tsup"
   },
   "eslintConfig": {
     "extends": [
@@ -29,23 +23,18 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@babel/cli": "^7.25.9",
-    "@babel/preset-react": "^7.25.9"
+    "@babel/preset-react": "^7.25.9",
+    "@types/node": "^22.9.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.6.3"
   },
-  "description": "React chat widget component.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supportai-it/react-chat-widget.git"
+  },
+  "description": "React chat widget component for SupportAI.",
   "author": "Giacomo Arienti",
   "license": "ISC"
 }

@@ -1,6 +1,15 @@
 import { useEffect } from 'react';
 
-const ChatWidget = ({
+interface ChatWidgetProps {
+    chatUrl: string;
+    buttonColor?: string;
+    buttonHoverColor?: string;
+    buttonSize?: string;
+    frameWidth?: string | number;
+    frameHeight?: string | number;
+}
+
+export const ChatWidget: React.FC<ChatWidgetProps> = ({
     chatUrl,
     buttonColor = '#e74266',
     buttonHoverColor = '#d6365d',
@@ -19,8 +28,8 @@ const ChatWidget = ({
 
         const iframe = document.createElement('iframe');
         iframe.src = chatUrl;
-        iframe.width = frameWidth;
-        iframe.height = frameHeight;
+        iframe.width = frameWidth.toString();
+        iframe.height = frameHeight.toString();
         iframe.style.border = 'none';
         iframe.style.overflow = 'hidden';
         iframe.style.transformOrigin = 'bottom right';
@@ -83,5 +92,3 @@ const ChatWidget = ({
 
     return null;
 };
-
-export default ChatWidget;
