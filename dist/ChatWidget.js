@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-export const ChatWidget = ({
+const ChatWidget = ({
   chatUrl,
   buttonColor = '#e74266',
   buttonHoverColor = '#d6365d',
@@ -70,3 +70,4 @@ export const ChatWidget = ({
   }, [chatUrl, buttonColor, buttonHoverColor, buttonSize, frameWidth, frameHeight]);
   return null;
 };
+export default ChatWidget;
