@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 
 interface ChatWidgetProps {
     chatUrl: string;
@@ -17,78 +17,82 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
     frameWidth = '400',
     frameHeight = '600'
 }) => {
-    useEffect(() => {
-        const chatFrame = document.createElement('div');
-        chatFrame.id = 'chat-frame';
-        chatFrame.style.position = 'fixed';
-        chatFrame.style.bottom = `calc(${buttonSize} + 25px)`;
-        chatFrame.style.right = '1rem';
-        chatFrame.style.zIndex = '999';
-        chatFrame.style.display = 'none';
+    const [isChatVisible, setIsChatVisible] = useState(false);
+    const chatFrameRef = useRef<HTMLDivElement>(null);
 
-        const iframe = document.createElement('iframe');
-        iframe.src = chatUrl;
-        iframe.width = frameWidth.toString();
-        iframe.height = frameHeight.toString();
-        iframe.style.border = 'none';
-        iframe.style.overflow = 'hidden';
-        iframe.style.transformOrigin = 'bottom right';
+    const toggleChatVisibility = () => setIsChatVisible((prev) => !prev);
 
-        chatFrame.appendChild(iframe);
+    return (
+        <>
+            {/* Chat Frame */}
+            <div
+                ref={chatFrameRef}
+                style={{
+                    position: 'fixed',
+                    bottom: `calc(${buttonSize} + 25px)`,
+                    right: '1rem',
+                    zIndex: 999,
+                    display: isChatVisible ? 'block' : 'none',
+                }}
+            >
+                <iframe
+                    src={chatUrl}
+                    width={frameWidth.toString()}
+                    height={frameHeight.toString()}
+                    style={{
+                        border: 'none',
+                        overflow: 'hidden',
+                        transformOrigin: 'bottom right',
+                    }}
+                    title="Chat Widget"
+                />
+            </div>
 
-        const chatButton = document.createElement('div');
-        chatButton.id = 'chat-btn';
-        chatButton.style.position = 'fixed';
-        chatButton.style.bottom = '1rem';
-        chatButton.style.right = '1rem';
-        chatButton.style.zIndex = '9999';
-        chatButton.style.cursor = 'pointer';
+            {/* Chat Button */}
+            <div
+                onClick={toggleChatVisibility}
+                style={{
+                    position: 'fixed',
+                    bottom: '1rem',
+                    right: '1rem',
+                    zIndex: 9999,
+                    cursor: 'pointer',
+                }}
+            >
+                <div
+                    style={{
+                        background: buttonColor,
+                        color: '#fff',
+                        width: buttonSize,
+                        height: buttonSize,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'transform 0.15s ease, background 0.15s ease',
+                    }}
+                    className="chat-button"
+                >
+                    {/* SVG Icon */}
+                    <svg viewBox="0 0 24 24" width="32" height="32">
+                        <path
+                            fill="currentColor"
+                            d="M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8"
+                        />
+                    </svg>
+                </div>
+            </div>
 
-        const buttonCircle = document.createElement('div');
-        buttonCircle.style.background = buttonColor;
-        buttonCircle.style.color = '#fff';
-        buttonCircle.style.width = buttonSize;
-        buttonCircle.style.height = buttonSize;
-        buttonCircle.style.borderRadius = '50%';
-        buttonCircle.style.display = 'flex';
-        buttonCircle.style.alignItems = 'center';
-        buttonCircle.style.justifyContent = 'center';
-        buttonCircle.style.transition = 'transform 0.15s ease, background 0.15s ease';
-
-        buttonCircle.addEventListener('mouseenter', () => {
-            buttonCircle.style.transform = 'scale(1.05)';
-            buttonCircle.style.background = buttonHoverColor;
-        });
-        buttonCircle.addEventListener('mouseleave', () => {
-            buttonCircle.style.transform = 'scale(1)';
-            buttonCircle.style.background = buttonColor;
-        });
-
-        const svgIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svgIcon.setAttribute('viewBox', '0 0 24 24');
-        svgIcon.setAttribute('width', '32');
-        svgIcon.setAttribute('height', '32');
-
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('fill', 'currentColor');
-        path.setAttribute('d', 'M12 3c5.5 0 10 3.58 10 8s-4.5 8-10 8c-1.24 0-2.43-.18-3.53-.5C5.55 21 2 21 2 21c2.33-2.33 2.7-3.9 2.75-4.5C3.05 15.07 2 13.13 2 11c0-4.42 4.5-8 10-8');
-
-        svgIcon.appendChild(path);
-        buttonCircle.appendChild(svgIcon);
-        chatButton.appendChild(buttonCircle);
-
-        document.body.appendChild(chatFrame);
-        document.body.appendChild(chatButton);
-
-        chatButton.addEventListener('click', () => {
-            chatFrame.style.display = chatFrame.style.display === 'none' ? 'block' : 'none';
-        });
-
-        return () => {
-            chatFrame.remove();
-            chatButton.remove();
-        };
-    }, [chatUrl, buttonColor, buttonHoverColor, buttonSize, frameWidth, frameHeight]);
-
-    return null;
+            {/* Styles */}
+            <style>{`
+                .chat-button {
+                    background: ${buttonColor};
+                }
+                .chat-button:hover {
+                    background: ${buttonHoverColor} !important;
+                    transform: scale(1.05);
+                }
+            `}</style>
+        </>
+    );
 };

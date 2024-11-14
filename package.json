@@ -1,6 +1,6 @@
 {
   "name": "@supportai.it/react-chat-widget",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -35,6 +35,6 @@
     "url": "git+https://github.com/supportai-it/react-chat-widget.git"
   },
   "description": "React chat widget component for SupportAI.",
-  "author": "Giacomo Arienti",
+  "author": "giacomoarienti",
   "license": "ISC"
 }
