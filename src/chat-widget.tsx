@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface ChatWidgetProps {
     chatUrl: string;
     buttonColor?: string;
     buttonHoverColor?: string;
     buttonSize?: string;
-    frameWidth?: string | number;
-    frameHeight?: string | number;
+    getContext?: () => string;
 }
 
 export const ChatWidget: React.FC<ChatWidgetProps> = ({
@@ -14,13 +13,25 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
     buttonColor = '#e74266',
     buttonHoverColor = '#d6365d',
     buttonSize = '64px',
-    frameWidth = '400',
-    frameHeight = '600'
+    getContext,
 }) => {
+    const [iframeUrl, setIframeUrl] = useState(chatUrl);
     const [isChatVisible, setIsChatVisible] = useState(false);
     const chatFrameRef = useRef<HTMLDivElement>(null);
 
-    const toggleChatVisibility = () => setIsChatVisible((prev) => !prev);
+    useEffect(() => {
+        const context = getContext && getContext();
+        if (context) {
+            const url = new URL(chatUrl);
+            url.searchParams.set('context', context);
+
+            setIframeUrl(url.toString());
+        }
+    }, [getContext, chatUrl]);
+
+    const toggleChatVisibility = () => {
+        setIsChatVisible((prev) => !prev);
+    }
 
     return (
         <>
@@ -32,17 +43,23 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                     bottom: `calc(${buttonSize} + 25px)`,
                     right: '1rem',
                     zIndex: 999,
-                    display: isChatVisible ? 'block' : 'none',
+                    display: isChatVisible ? 'flex' : 'none',
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
                 }}
             >
                 <iframe
-                    src={chatUrl}
-                    width={frameWidth.toString()}
-                    height={frameHeight.toString()}
+                    src={iframeUrl}
                     style={{
                         border: 'none',
                         overflow: 'hidden',
                         transformOrigin: 'bottom right',
+                        width: '90%',
+                        maxWidth: '400px',
+                        height: '80%',
+                        maxHeight: '600px',
                     }}
                     title="Chat Widget"
                 />
